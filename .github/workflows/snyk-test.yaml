@@ -13,7 +13,15 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@master
+        continue-on-error: true # To make sure that monitor gets called
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_SECRET }}
         with:
           args: --severity-threshold=high
+
+      - name: Monitor project in Snyk
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_SECRET }}
+        with:
+          command: monitor
